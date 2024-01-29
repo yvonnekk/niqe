@@ -1,15 +1,10 @@
+import math
+import os
+
+import cv2
 import numpy as np
-import scipy.misc
-import scipy.io
-from os.path import dirname
-from os.path import join
 import scipy
 from PIL import Image
-import numpy as np
-import scipy.ndimage
-import numpy as np
-import scipy.special
-import math
 
 gamma_range = np.arange(0.2, 10, 0.001)
 a = scipy.special.gamma(2.0/gamma_range)
@@ -137,7 +132,7 @@ def get_patches_test_features(img, patch_size, stride=8):
 
 def extract_on_patches(img, patch_size):
     h, w = img.shape
-    patch_size = np.int(patch_size)
+    patch_size = np.int_(patch_size)
     patches = []
     for j in range(0, h-patch_size+1, patch_size):
         for i in range(0, w-patch_size+1, patch_size):
@@ -170,7 +165,8 @@ def _get_patches_generic(img, patch_size, is_train, stride):
 
 
     img = img.astype(np.float32)
-    img2 = scipy.misc.imresize(img, 0.5, interp='bicubic', mode='F')
+    # img2 = scipy.misc.imresize(img, 0.5, interp='bicubic', mode='F')
+    img2 = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
 
     mscn1, var, mu = compute_image_mscn_transform(img)
     mscn1 = mscn1.astype(np.float32)
@@ -189,12 +185,15 @@ def _get_patches_generic(img, patch_size, is_train, stride):
 def niqe(inputImgData):
 
     patch_size = 96
-    module_path = dirname(__file__)
+    module_path = os.path.dirname(__file__)
 
     # TODO: memoize
-    params = scipy.io.loadmat(join(module_path, 'data', 'niqe_image_params.mat'))
-    pop_mu = np.ravel(params["pop_mu"])
-    pop_cov = params["pop_cov"]
+    # params = scipy.io.loadmat(join(module_path, 'data', 'niqe_image_params.mat'))
+    # pop_mu = np.ravel(params["pop_mu"])
+    # pop_cov = params["pop_cov"]
+    params = scipy.io.loadmat(os.path.join(module_path, 'model', 'modelparameters.mat'))
+    pop_mu = np.ravel(params['mu_prisparam'])
+    pop_cov = params['cov_prisparam']
 
 
     M, N = inputImgData.shape
@@ -230,6 +229,13 @@ if __name__ == "__main__":
     print('NIQE of ref parrot image is: %0.3f'% niqe(ref))
     print('NIQE of dis parrot image is: %0.3f'% niqe(dis))
 
+    # path = './test_imgs/'
+    # pathlist= os.listdir(path)
+    # for item in pathlist:
+    #     # print(item)
+    #     img = Image.open(join(path, item))
+    #     img = np.array(img.convert('LA'))[:,:,0]
+    #     print(f'NIQE of {item} is: %0.3f'% niqe(img))
 
 
 
