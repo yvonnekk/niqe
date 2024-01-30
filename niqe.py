@@ -191,6 +191,8 @@ def niqe(inputImgData):
     # params = scipy.io.loadmat(join(module_path, 'data', 'niqe_image_params.mat'))
     # pop_mu = np.ravel(params["pop_mu"])
     # pop_cov = params["pop_cov"]
+    
+    # Based on https://github.com/utlive/niqe
     params = scipy.io.loadmat(os.path.join(module_path, 'model', 'modelparameters.mat'))
     pop_mu = np.ravel(params['mu_prisparam'])
     pop_cov = params['cov_prisparam']
