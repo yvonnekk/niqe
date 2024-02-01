@@ -191,7 +191,7 @@ def niqe(inputImgData):
     # params = scipy.io.loadmat(join(module_path, 'data', 'niqe_image_params.mat'))
     # pop_mu = np.ravel(params["pop_mu"])
     # pop_cov = params["pop_cov"]
-    
+
     # Based on https://github.com/utlive/niqe
     params = scipy.io.loadmat(os.path.join(module_path, 'model', 'modelparameters.mat'))
     pop_mu = np.ravel(params['mu_prisparam'])
@@ -230,14 +230,3 @@ if __name__ == "__main__":
     
     print('NIQE of ref parrot image is: %0.3f'% niqe(ref))
     print('NIQE of dis parrot image is: %0.3f'% niqe(dis))
-
-    # path = './test_imgs/'
-    # pathlist= os.listdir(path)
-    # for item in pathlist:
-    #     # print(item)
-    #     img = Image.open(join(path, item))
-    #     img = np.array(img.convert('LA'))[:,:,0]
-    #     print(f'NIQE of {item} is: %0.3f'% niqe(img))
-
-
-
